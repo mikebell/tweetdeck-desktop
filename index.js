@@ -2,9 +2,8 @@
 const path = require('path');
 const fs = require('fs');
 const electron = require('electron');
-const config = require('./config');
 
-const app = electron.app;
+const {app} = electron;
 const windowStateKeeper = require('electron-window-state');
 
 require('electron-debug')();
@@ -13,10 +12,9 @@ require('electron-context-menu')();
 
 let mainWindow;
 let isQuitting = false;
-let win;
 
 function createMainWindow() {
-  let mainWindowState = windowStateKeeper({
+  const mainWindowState = windowStateKeeper({
     defaultWidth: 1000,
     defaultHeight: 800
   });
@@ -43,7 +41,7 @@ function createMainWindow() {
     win.setSheetOffset(40);
   }
 
-  win.loadURL('https://twitter.com/login?hide_message=true&redirect_after_login=https%3A%2F%2Ftweetdeck.twitter.com%2F%3Fvia_twitter_login%3Dtrue');
+  win.loadURL('https://tweetdeck.twitter.com/');
   win.on('close', e => {
     if (!isQuitting) {
       e.preventDefault();
@@ -94,24 +92,23 @@ app.on('ready', () => {
   const template = [{
     label: 'Application',
     submenu: [
-        {label: 'About Application', selector: 'orderFrontStandardAboutPanel:'},
-        {type: 'separator'},
-        {label: 'Quit', accelerator: 'Command+Q', click: () => {
-          app.quit();
-        }}
+      {label: 'About Application', selector: 'orderFrontStandardAboutPanel:'},
+      {type: 'separator'},
+      {label: 'Quit', accelerator: 'Command+Q', click: () => {
+        app.quit();
+      }}
     ]}, {
-      label: 'Edit',
-      submenu: [
-        {label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:'},
-        {label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:'},
-        {type: 'separator'},
-        {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
-        {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},
-        {label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:'},
-        {label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:'}
-      ]
-    }
-  ];
+    label: 'Edit',
+    submenu: [
+      {label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:'},
+      {label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:'},
+      {type: 'separator'},
+      {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
+      {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},
+      {label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:'},
+      {label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:'}
+    ]
+  }];
 
   electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(template));
 });
